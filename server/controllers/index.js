@@ -1,7 +1,11 @@
 'use strict';
 
-const router = require('koa-router')();
+const { Router } = require('express');
 
-router.use('/api', require('./api').routes());
+const router = new Router();
+
+router.use('/order', require('./order'));
+
+//router.use('/prometheus', require('./prometheus'));
 
 module.exports = router;

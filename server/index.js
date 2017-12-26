@@ -1,16 +1,11 @@
 'use strict'
 
-const config = require('config')
-const express = require('express')
-const app = express()
+const config = require('config');
+const express = require('express');
+const controllers = require('./controllers');
+const app = express();
 
-//app.listen(3000, () => console.log('Example app listening on port 3000!'))
-
-
-/////
 //const errorHandler = require('./errorHandler');
-//const controllers = require('./controllers');
-
 
 /** error handler **/
 //app.use(errorHandler.getErrorHandler());
@@ -18,10 +13,8 @@ const app = express()
 /** Web **/
 app.use(express.static('public'))
 
-
 /** routes **/
-//app.use(controllers.routes());
-
+app.use('/api', controllers);
 
 /** initialize modules **/
 require('./bootstrap')()

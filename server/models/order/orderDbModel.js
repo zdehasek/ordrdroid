@@ -21,7 +21,7 @@ OrderDbModel.prototype = {
     /**
      * @type {string}
      */
-    name: null,
+    fullName: null,
 
     /**
      * @type {string}

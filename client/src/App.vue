@@ -1,12 +1,12 @@
 <template>
   <div id="app">
     <h1>{{ msg }}</h1>
-    <Form/>
+    <OrderForm/>
   </div>
 </template>
 
 <script>
-import Form from './components/Form';
+import OrderForm from './components/OrderForm';
 
 export default {
   name: 'app',
@@ -16,7 +16,7 @@ export default {
     }
   },
   components: {
-    Form
+    OrderForm
   }
 }
 </script>
