@@ -1,62 +1,97 @@
 <template>
   <div id="orderForm">
-    <h2>Nastavení tvojí objednávky:</h2>    
-    <div id="formData">      
-      <div id="formPersonalData">
-        <h3>Osobní údaje</h3>
-          <div id="formPersonalData" v-for="item in personalData" :key="item.value">
-            {{item.title}}: <input v-bind:type="item.type" v-bind:name="item.name" v-bind:value="item.value"><br>
-          </div>
+    <div class="post">
+      <div class="loading" v-if="loading">
+        Loading...
       </div>
-      <br>  
-      <div id="formOrderData">
-        <h3>Údaje k objednávce</h3>
-          <div id="formOrderData" v-for="item in OrderData" :key="item.value">
-            {{item.title}}: <input v-bind:type="item.type" v-bind:name="item.name" v-bind:value="item.value"><br>
-          </div>
-        </div>       
-      </div>
-  </div>
+    
+    <div v-if="error" class="error">
+      {{ error }}
+    </div>
+    
+    <div v-if="orderData" class="content">
+
+      <h2>Nastavení tvojí objednávky:</h2>    
+      <div id="formData">      
+        <div id="formPersonalData">
+          <h3>Osobní údaje</h3>
+            <div id="formPersonalData" v-for="item in personalData" :key="item.value">
+              {{item.title}}: <input v-bind:type="item.type" v-bind:name="item.name" v-bind:value="item.value"><br>
+            </div>
+        </div>
+        <br>  
+        <div id="formOrderData">
+          <h3>Údaje k objednávce</h3>
+            <div id="formOrderData" v-for="item in orderData" :key="item.value">
+              {{item.title}}: <input v-bind:type="item.type" v-bind:name="item.name" v-bind:value="item.value"><br>
+            </div>
+          </div>       
+        </div>
+    </div>
+    </div>
+    </div>
 </template>
 
 <script>
 export default {
   name: 'orderForm',
-  data: () => ({
-    personalData:[
-      {title:'Jméno',type:'text', name: 'orderNumber',value: ''},
-      {title:'IČO',type:'text', name: 'bussinessId',value:''},
-      {title:'Sídlo',type:'text', name: 'address',value:''},
-      {title:'Bankovní spojení', type:'text', name: 'bankAccount',value:''},
-      {title:'Email',type:'text', name: 'email',value:''},
-      {title:'Telefon',type:'text', name: 'phone',value:''}
-    ],
-    OrderData:[
-      {title:'Číslo objednávky',type:'number', name: 'orderNumber',value:''},
-      {title:' Číslo smlouvy',type:'text', name: 'contractNumber',value:''},
-      {title:'Popis poskytované služby',type:'text', name: 'bussinessId',value:''},
-      {title:'Cena objednávky',type:'text', name: 'address',value:''},
-      {title:'Podpis',type:'text', name: 'bankAccount',value:''}
-    ]
-  }),
-  created: () => {
-    const fml = [
+  data () {
+    return {
+      loading: false,
+      orderData: null,
+      fetchedData: null,
+      error: null
+    }
+  },
+  created () {
+    this.fetchData()
+  },
+  methods: {
+    fetchData () {
+      this.error = this.orderData = this.fetchedData = null
+      this.loading = true
+    fetch(
+    '/api/order', {
+      method: 'GET',
+      credentials: 'same-origin',
+      headers: {
+        'X-Requested-With': 'XMLHttpRequest'
+      }
+    })
+    .then(response => {
+      return response.json()
+        .then(data => {
+          if (!response.ok) {
+            throw new Error(data.error);
+          }
+          console.log(data.fullName);
 
-    ];
-    
-    /*     
-    console.log(window.location.href)
-    console.log(document.URL) 
-    */
+          this.fetchedData.personal = [
+            {title:'Jméno',type:'text', name: 'orderNumber',value: data.fullName},
+            {title:'IČO',type:'text', name: 'bussinessId',value:''},
+            {title:'Sídlo',type:'text', name: 'address',value:''},
+            {title:'Bankovní spojení', type:'text', name: 'bankAccount',value:''},
+            {title:'Email',type:'text', name: 'email',value:''},
+            {title:'Telefon',type:'text', name: 'phone',value:''}
+          ]
 
-    // selectedItem.aliasId = data.response.id;
-    // selectedItem.count = data.response.stockItem.count;
-    // selectedItem.stockPrice = data.response.stockItem.price;
-    // selectedItem.label = unmappedItem.name;
-    // selectedItem.invoiceCount = unmappedItem.count;
-    // selectedItem.price = unmappedItem.invoicePriceWithTax;
+          this.orderData = [
+            {title:'Číslo objednávky',type:'number', name: 'orderNumber',value:''},
+            {title:' Číslo smlouvy',type:'text', name: 'contractNumber',value:''},
+            {title:'Popis poskytované služby',type:'text', name: 'bussinessId',value:''},
+            {title:'Cena objednávky',type:'text', name: 'address',value:''},
+            {title:'Podpis',type:'text', name: 'bankAccount',value:''}
+          ]
+
+          this.loading = false
+        });
+    })
+    .catch(err => {
+      this.error = err.toString()
+
+    });
+    }
   }
-
 }
 </script>
 
