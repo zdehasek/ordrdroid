@@ -9,27 +9,23 @@
       {{ error }}
     </div>
     
-    <div v-if="orderData" class="content">
+    <div v-if="fetchedData" class="content">
 
       <h2>Nastavení tvojí objednávky:</h2>    
-      <div id="formData">      
-        <div id="formPersonalData">
-          <h3>Osobní údaje</h3>
-            <div id="formPersonalData" v-for="item in personalData" :key="item.value">
-              {{item.title}}: <input v-bind:type="item.type" v-bind:name="item.name" v-bind:value="item.value"><br>
+      <div id="formData">
+        <br>
+
+            <div id="formPersonalData" v-for="item in fetchedData" :key="item.name">
+
+              {{item.title}}:
+              <input v-model="item.value">
+              <br>
             </div>
+            <button type="button" v-on:click="saveData()" >Save</button>
         </div>
-        <br>  
-        <div id="formOrderData">
-          <h3>Údaje k objednávce</h3>
-            <div id="formOrderData" v-for="item in orderData" :key="item.value">
-              {{item.title}}: <input v-bind:type="item.type" v-bind:name="item.name" v-bind:value="item.value"><br>
-            </div>
-          </div>       
-        </div>
+      </div>
     </div>
-    </div>
-    </div>
+  </div>
 </template>
 
 <script>
@@ -38,7 +34,6 @@ export default {
   data () {
     return {
       loading: false,
-      orderData: null,
       fetchedData: null,
       error: null
     }
@@ -48,7 +43,7 @@ export default {
   },
   methods: {
     fetchData () {
-      this.error = this.orderData = this.fetchedData = null
+      this.error = this.fetchedData = null
       this.loading = true
     fetch(
     '/api/order', {
@@ -64,23 +59,19 @@ export default {
           if (!response.ok) {
             throw new Error(data.error);
           }
-          console.log(data.fullName);
 
-          this.fetchedData.personal = [
-            {title:'Jméno',type:'text', name: 'orderNumber',value: data.fullName},
-            {title:'IČO',type:'text', name: 'bussinessId',value:''},
+          this.fetchedData = [
+            {title:'Jméno',type:'text', name: 'fullName',value: data.fullName},
             {title:'Sídlo',type:'text', name: 'address',value:''},
+            {title:'IČO',type:'text', name: 'bussinessId',value: data.bussinessId},
             {title:'Bankovní spojení', type:'text', name: 'bankAccount',value:''},
             {title:'Email',type:'text', name: 'email',value:''},
-            {title:'Telefon',type:'text', name: 'phone',value:''}
-          ]
-
-          this.orderData = [
+            {title:'Telefon',type:'text', name: 'phone',value:''},
             {title:'Číslo objednávky',type:'number', name: 'orderNumber',value:''},
             {title:' Číslo smlouvy',type:'text', name: 'contractNumber',value:''},
             {title:'Popis poskytované služby',type:'text', name: 'bussinessId',value:''},
             {title:'Cena objednávky',type:'text', name: 'address',value:''},
-            {title:'Podpis',type:'text', name: 'bankAccount',value:''}
+            {title:'Podpis',type:'text', name: 'bankAccount',value:''},
           ]
 
           this.loading = false
@@ -90,6 +81,9 @@ export default {
       this.error = err.toString()
 
     });
+    },
+    saveData() {
+      console.log(this.fetchedData[0].value);
     }
   }
 }
@@ -126,14 +120,6 @@ export default {
   align-items: flex-start;
   //background-color: green;
   align-self: left;
-}
-
-#formOrderData {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  //background-color: blue;
-  align-self: right;
 }
 
 h1, h2 {
