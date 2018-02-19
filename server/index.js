@@ -2,7 +2,7 @@
 
 const config = require('config');
 const express = require('express');
-const controllers = require('./controllers');
+const controller = require('./controller');
 const app = express();
 
 //const errorHandler = require('./errorHandler');
@@ -14,7 +14,7 @@ const app = express();
 app.use(express.static('public'))
 
 /** routes **/
-app.use('/api', controllers);
+app.use('/api', controller);
 
 /** initialize modules **/
 require('./bootstrap')()

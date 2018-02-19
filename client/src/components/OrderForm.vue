@@ -84,6 +84,34 @@ export default {
     },
     saveData() {
       console.log(this.fetchedData[0].value);
+      this.error = this.fetchedData = null
+      this.saving = true
+      fetch(
+      '/api/order', {
+        method: 'PUT',
+        credentials: 'same-origin',
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest'
+        }
+      })
+      .then(response => {
+        return response.json()
+          .then(data => {
+            if (!response.ok) {
+              throw new Error(data.error);
+            }
+
+            // TODO: Send data ????
+
+            this.saving = false
+          });
+      })
+      .catch(err => {
+        this.error = err.toString()
+
+      });
+
+
     }
   }
 }
