@@ -45,53 +45,58 @@ export default {
     fetchData () {
       this.error = this.fetchedData = null
       this.loading = true
-    fetch(
-    '/api/order', {
-      method: 'GET',
-      credentials: 'same-origin',
-      headers: {
-        'X-Requested-With': 'XMLHttpRequest'
-      }
-    })
-    .then(response => {
-      return response.json()
-        .then(data => {
-          if (!response.ok) {
-            throw new Error(data.error);
-          }
-
-          this.fetchedData = [
-            {title:'Jméno',type:'text', name: 'fullName',value: data.fullName},
-            {title:'Sídlo',type:'text', name: 'address',value:''},
-            {title:'IČO',type:'text', name: 'bussinessId',value: data.bussinessId},
-            {title:'Bankovní spojení', type:'text', name: 'bankAccount',value:''},
-            {title:'Email',type:'text', name: 'email',value:''},
-            {title:'Telefon',type:'text', name: 'phone',value:''},
-            {title:'Číslo objednávky',type:'number', name: 'orderNumber',value:''},
-            {title:' Číslo smlouvy',type:'text', name: 'contractNumber',value:''},
-            {title:'Popis poskytované služby',type:'text', name: 'bussinessId',value:''},
-            {title:'Cena objednávky',type:'text', name: 'address',value:''},
-            {title:'Podpis',type:'text', name: 'bankAccount',value:''},
-          ]
-
-          this.loading = false
-        });
-    })
-    .catch(err => {
-      this.error = err.toString()
-
-    });
-    },
-    saveData() {
-      console.log(this.fetchedData[0].value);
-      this.error = this.fetchedData = null
-      this.saving = true
       fetch(
       '/api/order', {
-        method: 'PUT',
+        method: 'GET',
         credentials: 'same-origin',
         headers: {
           'X-Requested-With': 'XMLHttpRequest'
+        }
+      })
+      .then(response => {
+        return response.json()
+          .then(data => {
+            if (!response.ok) {
+              throw new Error(data.error);
+            }
+
+            this.fetchedData = [
+              {title:'Jméno',type:'text', name: 'fullName',value: data.fullName},
+              {title:'Sídlo',type:'text', name: 'address',value:''},
+              {title:'IČO',type:'text', name: 'bussinessId',value: data.bussinessId},
+              {title:'Bankovní spojení', type:'text', name: 'bankAccount',value:''},
+              {title:'Email',type:'text', name: 'email',value:''},
+              {title:'Telefon',type:'text', name: 'phone',value:''},
+              {title:'Číslo objednávky',type:'number', name: 'orderNumber',value:''},
+              {title:' Číslo smlouvy',type:'text', name: 'contractNumber',value:''},
+              {title:'Popis poskytované služby',type:'text', name: 'bussinessId',value:''},
+              {title:'Cena objednávky',type:'text', name: 'address',value:''},
+              {title:'Podpis',type:'text', name: 'bankAccount',value:''},
+            ]
+
+            this.loading = false
+          });
+      })
+      .catch(err => {
+        this.error = err.toString()
+
+      });
+    
+    },
+    saveData() {
+      console.log(this.fetchedData[0].value);
+
+      this.error = this.fetchedData = null
+      
+      this.saving = true
+      // TODO: http://www.hartzis.me/fetch-post-express/
+      fetch(
+      '/api/order', {
+        method: 'put',
+        body: JSON.stringify(data),
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
         }
       })
       .then(response => {
