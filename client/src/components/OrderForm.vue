@@ -42,6 +42,7 @@ export default {
     this.fetchData()
   },
   methods: {
+
     fetchData () {
       this.error = this.fetchedData = null
       this.loading = true
@@ -83,17 +84,19 @@ export default {
       });
     
     },
+    
     saveData() {
       console.log(this.fetchedData[0].value);
 
-      this.error = this.fetchedData = null
+      //this.error = this.fetchedData = null;
       
-      this.saving = true
+      //this.saving = true;
       // TODO: http://www.hartzis.me/fetch-post-express/
+
       fetch(
       '/api/order', {
         method: 'put',
-        body: JSON.stringify(data),
+        body: JSON.stringify(this.fetchedData),
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json'
@@ -118,6 +121,7 @@ export default {
 
 
     }
+
   }
 }
 </script>
