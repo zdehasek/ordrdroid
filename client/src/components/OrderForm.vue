@@ -63,16 +63,17 @@ export default {
 
             this.fetchedData = [
               {title:'Jméno',type:'text', name: 'fullName',value: data.fullName},
-              {title:'Sídlo',type:'text', name: 'address',value:''},
+              {title:'Sídlo',type:'text', name: 'address',value:data.address},
               {title:'IČO',type:'text', name: 'bussinessId',value: data.bussinessId},
-              {title:'Bankovní spojení', type:'text', name: 'bankAccount',value:''},
-              {title:'Email',type:'text', name: 'email',value:''},
-              {title:'Telefon',type:'text', name: 'phone',value:''},
-              {title:'Číslo objednávky',type:'number', name: 'orderNumber',value:''},
-              {title:' Číslo smlouvy',type:'text', name: 'contractNumber',value:''},
-              {title:'Popis poskytované služby',type:'text', name: 'bussinessId',value:''},
-              {title:'Cena objednávky',type:'text', name: 'address',value:''},
-              {title:'Podpis',type:'text', name: 'bankAccount',value:''},
+              {title:'Bankovní spojení', type:'text', name: 'bankAccount',value: data.bankAccount},
+              {title:'Email',type:'text', name: 'email',value: data.email},
+              {title:'Telefon',type:'text', name: 'phone',value: data.phone},
+              {title:'Číslo objednávky',type:'number', name: 'firstOrderNumber',value: data.firstOrderNumber},
+              {title:' Číslo smlouvy',type:'text', name: 'contractNunber',value: data.contractNumber},
+              {title:'Popis poskytované služby',type:'text', name: 'contractdDescription',value: data.contractdDescription},
+              {title:'Cena objednávky',type:'text', name: 'orderPrice',value: data.orderPrice},
+              {title:'Podpis',type:'text', name: 'signature',value: data.signature},
+              
             ]
 
             this.loading = false
@@ -86,17 +87,15 @@ export default {
     },
     
     saveData() {
-      console.log(this.fetchedData[0].value);
-
-      //this.error = this.fetchedData = null;
-      
+      //this.error = this.fetchedData = null;      
       //this.saving = true;
       // TODO: http://www.hartzis.me/fetch-post-express/
+      const mapFetchedData = this.fetchedData.map(x => x.value);
 
       fetch(
       '/api/order', {
-        method: 'put',
-        body: JSON.stringify(this.fetchedData),
+        method: 'PUT',
+        body: JSON.stringify(mapFetchedData),
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json'

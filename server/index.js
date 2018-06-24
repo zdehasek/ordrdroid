@@ -3,6 +3,7 @@
 const config = require('config');
 const express = require('express');
 const controller = require('./controller');
+const bodyParser = require('body-parser');
 const app = express();
 
 //const errorHandler = require('./errorHandler');
@@ -14,6 +15,7 @@ const app = express();
 app.use(express.static('public'))
 
 /** routes **/
+app.use(bodyParser.json());
 app.use('/api', controller);
 
 /** initialize modules **/

@@ -60,7 +60,7 @@ OrderDbModel.prototype = {
     /**
      * @type {string}
      */
-    contractdDscription: null,
+    contractdDescription: null,
 
     /**
      * @type {number}
@@ -88,4 +88,4 @@ OrderDbModel.prototype = {
     _lastModifiedAt: null
 };
 
-module.exports = MemoryDbModel;
+module.exports = OrderDbModel;
