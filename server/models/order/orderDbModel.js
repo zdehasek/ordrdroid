@@ -9,7 +9,7 @@ const OrderDbModel = function () {
 OrderDbModel.prototype = {
 
     /**
-     * id
+     * id 
      */
     _id: null,
 

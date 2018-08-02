@@ -1,12 +1,12 @@
 'use strict';
 
 const express = require('express')
-const router = express.Router();
-const db = require('./models/db');
+const router = express.Router()
+const db = require('./models/db')
+const orderService = require('./models/order')
+const OrderDbModel = require('./models/order/orderDbModel')
 
 //const order = require('./models/order');
-//const historyTracker = require('./models/historyTracker');
-const prometheus = require('./models/prometheus');
 
 // API
 // TODO: predelat api url
@@ -17,17 +17,15 @@ router.get('/order', function (req, res) {
     const exampleData = {}
     
     res.send(exampleData)
+    console.log(exampleData)
+  
 })
 
 router.put('/order', function (req, res) {
-    console.log(req.body);
-    res.sendStatus(200);
-})
 
-router.get('/metrics', async (ctx) => {
-    const metrics = prometheus.register.metrics();
-    ctx.body = metrics;
-});
+    orderService.manageOrder(OrderDbModel, req.body);
+    res.sendStatus(200)
+})
 
 /*
 

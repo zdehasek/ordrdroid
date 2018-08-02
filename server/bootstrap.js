@@ -3,7 +3,6 @@
 const config = require('config');
 const db = require('./models/db');
 const log = require('winston');
-const prometheus = require('./models/prometheus');
 
 module.exports = async function () {
 
@@ -12,7 +11,6 @@ module.exports = async function () {
         await db.connect(config.db.url, config.db.options);
 
         //await order.init();
-        await prometheus.init();
 
     } catch (e) {
 
