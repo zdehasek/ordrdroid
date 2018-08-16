@@ -2,7 +2,6 @@
 
 const express = require('express')
 const router = express.Router()
-const db = require('./models/db')
 const orderService = require('./models/order')
 const OrderDbModel = require('./models/order/orderDbModel')
 

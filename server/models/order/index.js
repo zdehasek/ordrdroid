@@ -1,11 +1,19 @@
 'use strict';
 
-const orderStorage = require('./orderStorage')
+const db  = require('../db');
+//const orderStorage = require('./orderStorage')
+//const mongodb = require('mongodb')
 
 const orderService = {
 
+    _collection: null,
+
+
     async init () {
-        await orderStorage.init();
+
+        this._collection = db.db.collection('orders')
+
+        await this._collection.createIndex({ _lcFn: 1 })
     },
     
     /**
@@ -17,7 +25,7 @@ const orderService = {
         return supplierStorage.findSuppliersBySearch(search);
     },
 
-    manageOrder (dbModel, body) {
+    async manageOrder (dbModel, body) {
 
         const order = new dbModel()
 
@@ -34,20 +42,17 @@ const orderService = {
         order.signature = body['10']
 
         console.log(order)
-        
-        
-        db.collection('test').findAndModify({hello: 'world'}, // query
-  [['_id','asc']],  // sort order
-  function(err, object) {
-      if (err){
-          console.warn(err.message);  // returns error if no matching object found
-      }else{
-          console.dir(object);
-      }
-  });
-});
 
+        if (!Object.keys(order).length) {
+            return;
+        }
 
+        try {
+            await this._collection.updateOne({ _id: 1 }, { $set: { order } }, { upsert: true });
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
 };
 

@@ -1,6 +1,6 @@
 'use strict';
 
-const MongoClient = require('mongodb').MongoClient;
+const { MongoClient } = require('mongodb');
 
 
 class Mongo {
@@ -22,11 +22,15 @@ class Mongo {
             return this.db;
         }
 
-        options.promiseLibrary = Promise;
+        const _options = Object.assign({
+            autoReconnect: true,
+            reconnectTries: Number.MAX_SAFE_INTEGER,
+            bufferMaxEntries: 1000
+        }, options);
 
         try {
 
-            this.db = await MongoClient.connect(url, options);
+            this.db = (await MongoClient.connect(url, _options)).db();
 
             process.stdout.write('Connected into database. \n');
 
@@ -35,6 +39,26 @@ class Mongo {
         }
 
         return this.db;
+    }
+
+    /**
+     * DANGER! WARNING! ONLY FOR TESTING
+     * KEEP AWAY FROM LIVE!!! :))
+     *
+     * @returns {Promise}
+     */
+    clean () {
+
+        return this.db.collections()
+            .then((collections) => {
+
+                const notSystemCollections = collections.filter(collection => (
+                    collection.collectionName.indexOf('system.') !== 0
+                ));
+
+                // this is much faster than dropping all database
+                return Promise.all(notSystemCollections.map(collection => collection.drop()));
+            });
     }
 }
 
